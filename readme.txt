@@ -3,9 +3,9 @@ Contributors: fullthrottledevelopment, blepoxp
 Tags: passwords, protected, pages
 Requires at least: 2.7
 Tested up to: 3.0
-Stable tag: 0.2
+Stable tag: 0.3
 
-Applys the same protection to children pages applied to the parent page.
+Applies the same protection to children pages applied to the parent page.
 
 == Description ==
 
@@ -13,7 +13,7 @@ This plugin does one thing. If a page that is password protected has children pa
 
 If the correct password is entered on the parent page or any of its children pages, all related pages will be viewable to the user.
 
-0.2 Update adds ability to protect unlimited levels of grandchildren pages via the $post->ancestors. Props to trevorgehman on the WP.org support forums for the tip.
+The plugin protects unlimited levels of grandchildren pages via the $post->ancestors. It uses first ancestor that is password protected.
 
 == Installation ==
 
@@ -30,3 +30,16 @@ I'm trying to decide if this is the best way to proceeed or if I should take ano
 Please feel free to offer any suggestions or report any bugs here: [http://fullthrottledevelopment.com/password-protect-children-pages/]
 
 Thanks!
+
+== Changelog ==
+
+= 0.3 =
+* Fixed bug where children pages of non-protected parents had 'Protected: ' prepended to the title.
+* In case where grandparent page is not protected but parent page was, child pages are now protected.
+
+= 0.2 =
+* Added ability to protect all levels below initially protected page. Props to trevorgehman on the WP.org support forums for the tip.
+
+== Upgrade Notice ==
+= 0.3 =
+Fixed bug where children pages of non-protected parents had 'Protected: ' prepended to the title. Can also detect if parent page is protected now even when grandparent page is not protected.
