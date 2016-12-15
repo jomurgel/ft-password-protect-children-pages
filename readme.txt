@@ -1,5 +1,5 @@
 === FT Password Protect Children Pages ===
-Contributors: fullthrottledevelopment, blepoxp
+Contributors: fullthrottledevelopment, blepoxp, jomurgel
 Tags: passwords, protected, pages
 Requires at least: 2.7
 Tested up to: 3.0
@@ -9,7 +9,7 @@ Applies the same protection to children pages applied to the parent page.
 
 == Description ==
 
-This plugin does one thing. If a page that is password protected has children pages, all children pages will be protected with the same password. 
+This plugin does one thing. If a page that is password protected has children pages, all children pages will be protected with the same password.
 
 If the correct password is entered on the parent page or any of its children pages, all related pages will be viewable to the user.
 
