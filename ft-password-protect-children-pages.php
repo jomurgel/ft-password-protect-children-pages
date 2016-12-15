@@ -20,22 +20,28 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-// This function prints the password form if the parent page is password protected. It is called whenever 'the_content' is invoked.
-function ft_password_protect_children_page_contents( $org_content ){
-	if ( is_page() ){
+/**
+ * This function prints the password form if the parent page is password protected. It is called whenever 'the_content' is invoked.
+ *
+ * @param mixed[] $org_content Array.
+ * @return string
+ */
+function ft_password_protect_children_page_contents( $org_content ) {
+
+	if ( is_page() ) {
 		global $post;
 
-		// Grab ancestors
+		// Grab ancestors.
 		$ancestors = $post->ancestors;
 
-		// Loop through ancestors, grab first one that is password protected
+		// Loop through ancestors, grab first one that is password protected.
 		foreach ( $ancestors as $ancestor ) {
 
 			if ( post_password_required( $ancestor ) ) {
 				$real_post = $post;
 				$post = get_post( $ancestor );
 
-				echo get_the_password_form();
+				echo get_the_password_form(); // WPCS: XSS ok.
 				$post = $real_post;
 				return;
 			}
@@ -45,44 +51,57 @@ function ft_password_protect_children_page_contents( $org_content ){
 }
 add_filter( 'the_content', 'ft_password_protect_children_page_contents' );
 
-// This function prints the "excerpt can't be displayed" message if the parent post is protected. It is called whenever 'get_the_excerpt' is invoked (which gets invoked by get_excerpt() ).
-function ft_password_protect_children_page_excerpts( $org_excerpt ){
-	if ( is_page() ){
+/**
+ * This function prints the "excerpt can't be displayed" message if the parent post is protected. It is called whenever 'get_the_excerpt' is invoked (which gets invoked by get_excerpt() ).
+ *
+ * @param mixed[] $org_excerpt Array.
+ * @return string
+ */
+function ft_password_protect_children_page_excerpts( $org_excerpt ) {
+
+	if ( is_page() ) {
 		global $post;
 
-		// Grab ancestors
+		// Grab ancestors.
 		$ancestors = $post->ancestors;
 
-		// Loop through ancestors, grab first one that is password protected
+		// Loop through ancestors, grab first one that is password protected.
 		foreach ( $ancestors as $ancestor ) {
 			if ( post_password_required( $ancestor ) ) {
-				$output = wpautop( __('There is no excerpt because this is a protected post.') );
+				$output = wpautop( esc_html__( 'There is no excerpt because this is a protected post.' ) );
 				return $output;
 			}
 		}
 	}
 	return $org_excerpt;
 }
-add_filter( 'get_the_excerpt', 'ft_password_protect_children_page_excerpts' , 9);
+add_filter( 'get_the_excerpt', 'ft_password_protect_children_page_excerpts' , 9 );
 
-// This function alter's the Post Title to include the protected_title_format
-function ft_password_protect_children_page_titles( $org_title, $title_id='' ){
-	if ( is_page() && in_the_loop() ){
+/**
+ * This function alter's the Post Title to include the protected_title_format.
+ *
+ * @param string $org_title to get protected title.
+ * @param string $title_id  to generate title.
+ * @return titles.
+ */
+function ft_password_protect_children_page_titles( $org_title, $title_id = '' ) {
 
+	if ( is_page() && in_the_loop() ) {
 		global $post;
 
-		// Grab ancestors
+		// Grab ancestors.
 		$ancestors = $post->ancestors;
 
-		// Loop through ancestors, grab first one that is password protected
+		// Loop through ancestors, grab first one that is password protected.
 		foreach ( $ancestors as $ancestor ) {
 
 			$ancestor_post = get_post( $ancestor );
 
-			if ( post_password_required( $ancestor ) || ( isset( $ancestor_post->post_password ) && !empty( $ancestor_post->post_password ) ) ) {
+			if ( post_password_required( $ancestor ) || ( isset( $ancestor_post->post_password ) && ! empty( $ancestor_post->post_password ) ) ) {
 
-				$protected_title_format = apply_filters( 'protected_title_format', __('Protected: %s') );
+				$protected_title_format = apply_filters( 'protected_title_format', esc_html__( 'Protected: %s' ) );
 				$title = sprintf( $protected_title_format, $org_title );
+
 				return $title;
 			}
 		}
@@ -90,4 +109,3 @@ function ft_password_protect_children_page_titles( $org_title, $title_id='' ){
 	return $org_title;
 }
 add_filter( 'the_title', 'ft_password_protect_children_page_titles', 10 , 2 );
-?>
