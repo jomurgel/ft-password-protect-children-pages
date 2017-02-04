@@ -28,7 +28,7 @@
  */
 function ft_password_protect_children_page_contents( $org_content ) {
 
-	if ( is_page() ) {
+	if ( is_page() && post_password_required() ) {
 		global $post;
 
 		// Grab ancestors.
@@ -39,10 +39,10 @@ function ft_password_protect_children_page_contents( $org_content ) {
 
 			if ( post_password_required( $ancestor ) ) {
 				$real_post = $post;
-				$post = get_post( $ancestor );
+				$post = get_post( $ancestor ); // WPCS: override ok.
 
 				echo get_the_password_form(); // WPCS: XSS ok.
-				$post = $real_post;
+				$post = $real_post; // WPCS: override ok.
 				return;
 			}
 		}
@@ -59,7 +59,7 @@ add_filter( 'the_content', 'ft_password_protect_children_page_contents' );
  */
 function ft_password_protect_children_page_excerpts( $org_excerpt ) {
 
-	if ( is_page() ) {
+	if ( is_page() && post_password_required() ) {
 		global $post;
 
 		// Grab ancestors.
@@ -86,7 +86,7 @@ add_filter( 'get_the_excerpt', 'ft_password_protect_children_page_excerpts' , 9 
  */
 function ft_password_protect_children_page_titles( $org_title, $title_id = '' ) {
 
-	if ( is_page() && in_the_loop() ) {
+	if ( is_page() && in_the_loop() && post_password_required() ) {
 		global $post;
 
 		// Grab ancestors.
